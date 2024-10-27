@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkVault</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; padding: 0; 
+            background-color: #333; 
+            color: #f9f9f9; }
+        header { 
+            background-color: #000; 
+            color: #fff; 
+            padding: 10px; 
+            text-align: center; 
+            font-size: 32px; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            position: fixed; 
+            width: 100%; 
+            z-index: 1000; }
+        .container { 
+            display: flex; 
+            flex-direction: row; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            padding-top: 50px; 
+            padding-bottom: 50px; 
+            background-color: #333; }
+        .section { 
+            flex-basis: calc(25% - 40px); 
+            margin: 10px; 
+            background-color: #444; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.3s ease; 
+            overflow: hidden; 
+            height: 300px; 
+            overflow-y: auto; 
+            position: relative; }
+        .section:hover { 
+            transform: translateY(-5px); }
+        nav { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; }
+        .link-container { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            width: 90%; }
+        .link-container a { 
+            color: #f9f9f9; 
+            text-decoration: none; 
+            padding: 5px; 
+            border-bottom: 1px solid #ddd; 
+            transition: background-color 0.3s ease; 
+            font-size: 18px; 
+            text-align: center; 
+            flex: 1; }
+        .link-container a:hover { 
+            background-color: #555; }
+        .delete-button { 
+            background-color: #b22222; 
+            color: #f9f9f9; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 14px; 
+            padding: 5px; 
+            margin-left: 5px; }
+        h2 { 
+            margin-top: 0; 
+            padding-top: 10px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            color: #f9f9f9; }
+        .edit-mode { 
+            padding: 10px; 
+            display: none; 
+            flex-direction: column; 
+            gap: 5px; 
+            text-align: center; }
+        .edit-mode input { 
+            width: 80%; 
+            padding: 8px; 
+            font-size: 16px; 
+            margin: 5px auto; }
+        .edit-mode button { 
+            padding: 8px; 
+            background-color: #555; 
+            color: #f9f9f9; 
+            border: none; 
+            cursor: pointer;  }
+        .edit-mode button:hover { 
+            background-color: #666; }
+        @media screen and (max-width: 768px) { .section { flex-basis: calc(50% - 40px); } }
+        @media screen and (max-width: 480px) { .section { flex-basis: calc(100% - 40px); } }
+    </style>
+</head>
+<body>
+    <header>LinkVault</header>
+    <div class="container">
+        <div class="section" id="school">
+            <h2>School</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="school-title">
+                <input type="url" placeholder="Link URL" id="school-url">
+                <button onclick="addLink('school')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="reading">
+            <h2>Coding/Reading</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="reading-title">
+                <input type="url" placeholder="Link URL" id="reading-url">
+                <button onclick="addLink('reading')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="ai">
+            <h2>AI</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="ai-title">
+                <input type="url" placeholder="Link URL" id="ai-url">
+                <button onclick="addLink('ai')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="design">
+            <h2>Design</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="design-title">
+                <input type="url" placeholder="Link URL" id="design-url">
+                <button onclick="addLink('design')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="learning">
+            <h2>Learning Platforms</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="learning-title">
+                <input type="url" placeholder="Link URL" id="learning-url">
+                <button onclick="addLink('learning')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="research">
+            <h2>Research</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="research-title">
+                <input type="url" placeholder="Link URL" id="research-url">
+                <button onclick="addLink('reserach')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="storage">
+            <h2>Storage</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="storage-title">
+                <input type="url" placeholder="Link URL" id="storeage-url">
+                <button onclick="addLink('storage')">Add Link</button>
+            </div>
+        </div>
+        <div class="section" id="helper">
+            <h2>Study Helper</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="helper-title">
+                <input type="url" placeholder="Link URL" id="helper-url">
+                <button onclick="addLink('helper')">Add Link</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadLinks);
+
+        function toggleEditMode(button) {
+            const editDiv = button.nextElementSibling.nextElementSibling;
+            editDiv.style.display = editDiv.style.display === "none" ? "flex" : "none";
+        }
+
+        function loadLinks() {
+            const sections = document.querySelectorAll(".section");
+            sections.forEach(section => {
+                const sectionId = section.id;
+                const nav = section.querySelector("nav");
+                nav.innerHTML = ''; // Clear existing content
+
+                const links = JSON.parse(localStorage.getItem(sectionId) || "[]");
+                links.forEach(link => createLinkElement(nav, link.title, link.url, sectionId));
+            });
+        }
+
+        function addLink(sectionId) {
+            const titleInput = document.getElementById(`${sectionId}-title`);
+            const urlInput = document.getElementById(`${sectionId}-url`);
+            const title = titleInput.value.trim();
+            const url = urlInput.value.trim();
+
+            if (title && url) {
+                const nav = document.querySelector(`#${sectionId} nav`);
+
+                createLinkElement(nav, title, url, sectionId);
+                saveLinkToStorage(sectionId, title, url);
+
+                titleInput.value = "";
+                urlInput.value = "";
+            } else {
+                alert("Please enter both a title and a valid URL.");
+            }
+        }
+
+        function createLinkElement(nav, title, url, sectionId) {
+            const linkContainer = document.createElement("div");
+            linkContainer.className = "link-container";
+
+            const newLink = document.createElement("a");
+            newLink.href = url;
+            newLink.textContent = title;
+            newLink.target = "_blank";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function() { deleteLink(deleteButton, sectionId, title, url) };
+
+            linkContainer.appendChild(newLink);
+            linkContainer.appendChild(deleteButton);
+            nav.appendChild(linkContainer);
+        }
+
+        function saveLinkToStorage(sectionId, title, url) {
+            const links = JSON.parse(localStorage.getItem(sectionId) || "[]");
+            links.push({ title, url });
+            localStorage.setItem(sectionId, JSON.stringify(links));
+        }
+
+        function deleteLink(button, sectionId, title, url) {
+            const linkContainer = button.parentElement;
+            linkContainer.remove();
+
+            let links = JSON.parse(localStorage.getItem(sectionId) || "[]");
+            links = links.filter(link => !(link.title === title && link.url === url));
+            localStorage.setItem(sectionId, JSON.stringify(links));
+        }
+    </script>
+</body>
+</html>
