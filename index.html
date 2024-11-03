@@ -5,107 +5,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkVault</title>
     <style>
+     
+        /* Reset and Base Styling */
+        /* Apply a box model reset and remove default padding and margin */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* General Styling */
+        /* Style for the main body, including dark background and centered layout */
         body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; padding: 0; 
-            background-color: #333; 
-            color: #f9f9f9; }
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 6   0px; /* Header height offset */
+        }
+
+        /* Fixed header styling with dark background, white text, and centered content */
         header { 
-            background-color: #000; 
-            color: #fff; 
-            padding: 10px; 
-            text-align: center; 
-            font-size: 32px; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            position: fixed; 
-            width: 100%; 
-            z-index: 1000; }
-        .container { 
-            display: flex; 
-            flex-direction: row; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            padding-top: 50px; 
-            padding-bottom: 50px; 
-            background-color: #333; }
-        .section { 
-            flex-basis: calc(25% - 40px); 
-            margin: 10px; 
-            background-color: #444; 
-            border-radius: 20px; 
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1); 
-            transition: transform 0.3s ease; 
-            overflow: hidden; 
-            height: 300px; 
-            overflow-y: auto; 
-            position: relative; }
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Category Actions */
+        /* Styling for add, delete, and toggle mode buttons */
+        .category-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mode-toggle, .category-actions button {
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .mode-toggle:hover, .category-actions button:hover {
+            background-color: #666;
+        }
+
+        .search-bar {
+            margin-left: 15px;
+            padding: 8px;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .highlight {
+            background-color: rgb(0, 255, 136);
+            color: #333;
+        }
+
+        /* Responsive Layout Container */
+        /* Container layout for responsive and adaptive category sections */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 100px;
+        }
+
+        .section {
+            /* Styling for individual category sections */
+            flex-basis: calc(33.33% - 40px);
+            background-color: #444;
+            border-radius: 10px;
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            padding: 15px;
+            overflow: hidden;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 {
+             /* Styling for section titles */
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #181f1f;
+        }
+
         .section:hover { 
-            transform: translateY(-5px); }
-        nav { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; }
-        .link-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            width: 90%; }
-        .link-container a { 
-            color: #f9f9f9; 
-            text-decoration: none; 
-            padding: 5px; 
-            border-bottom: 1px solid #ddd; 
-            transition: background-color 0.3s ease; 
-            font-size: 18px; 
-            text-align: center; 
-            flex: 1; }
-        .link-container a:hover { 
-            background-color: #555; }
-        .delete-button { 
-            background-color: #b22222; 
-            color: #f9f9f9; 
-            border: none; 
-            cursor: pointer; 
-            font-size: 14px; 
-            padding: 5px; 
-            margin-left: 5px; }
-        h2 { 
-            margin-top: 0; 
-            padding-top: 10px; 
-            text-align: center; 
-            font-size: 24px; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            color: #f9f9f9; }
-        .edit-mode { 
-            padding: 10px; 
-            display: none; 
-            flex-direction: column; 
-            gap: 5px; 
-            text-align: center; }
-        .edit-mode input { 
-            width: 80%; 
-            padding: 8px; 
-            font-size: 16px; 
-            margin: 5px auto; }
-        .edit-mode button { 
-            padding: 8px; 
-            background-color: #555; 
-            color: #f9f9f9; 
-            border: none; 
-            cursor: pointer;  }
-        .edit-mode button:hover { 
-            background-color: #666; }
-        @media screen and (max-width: 768px) { .section { flex-basis: calc(50% - 40px); } }
-        @media screen and (max-width: 480px) { .section { flex-basis: calc(100% - 40px); } }
+            transform: translateY(-5px);
+        }
+
+        nav, .edit-mode {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .edit-mode {
+            display: none;
+            align-items: center;
+        }
+
+        .edit-mode input {
+            width: 90%;
+            padding: 8px;
+            font-size: 14px;
+            margin: 5px auto;
+            border-radius: 5px;
+            border: 1px solid #666;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .link-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+
+        .link-container a {
+            color: #f9f9f9;
+            text-decoration: none;
+            font-size: 16px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-container:hover {
+            background-color: #666;
+        }
+
+        .delete-button {
+            background-color: #b22222;
+            color: #f9f9f9;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+
+        /* Media Queries for Responsive Design */
+        /* Adjust layout for smaller screens */
+        @media screen and (max-width: 1024px) {
+            .section {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 20px;
+                padding: 10px;
+            }
+            .category-actions {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .section {
+                flex-basis: calc(100% - 20px);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            .section h2 {
+                font-size: 18px;
+            }
+            .link-container a {
+                font-size: 14px;
+            }
+        }
+    </style>    
     </style>
 </head>
 <body>
-    <header>LinkVault</header>
-    <div class="container">
+    <header>
+        LinkVault
+        <div class="category-actions">
+            <button onclick="addCategory()">Add Category</button>
+            <input class="search-bar" onkeyup="searchLinks()" placeholder="Search Links">
+            <button class="mode-toggle" onclick="toggleDarkMode()">Toggle Mode</button>
+        </div>
+    </header>
+    <!-- Main Container for Category Sections -->
+    <div class="container" id="container">
         <div class="section" id="school">
             <h2>Education</h2>
             <button onclick="toggleEditMode(this)">Edit Links</button>
@@ -186,19 +311,54 @@
                 <button onclick="addLink('helper')">Add Link</button>
             </div>
         </div>
+        <div class="section" id="hobby">
+            <h2>Entertainment and Hobbies</h2>
+            <button onclick="toggleEditMode(this)">Edit Links</button>
+            <nav></nav>
+            <div class="edit-mode">
+                <input type="text" placeholder="Link Title" id="hobby-title">
+                <input type="url" placeholder="Link URL" id="hobby-url">
+                <button onclick="addLink('hobby')">Add Link</button>
+            </div>
+        </div>
     </div>
 
     <script>
+         /* Initialize Page with Stored Links */
         document.addEventListener("DOMContentLoaded", loadLinks);
 
+        /* Toggle Edit Mode Visibility for a Category */
         function toggleEditMode(button) {
             const editDiv = button.nextElementSibling.nextElementSibling;
             editDiv.style.display = editDiv.style.display === "none" ? "flex" : "none";
         }
 
         function loadLinks() {
-            const sections = document.querySelectorAll(".section");
-            sections.forEach(section => {
+        // Load saved categories from local Storage
+            const savedCategories = JSON.parse(localStorage.getItem("categories") || "[]");
+        // Create sections for each saved category
+            savedCategories.forEach(categoryName => {
+                if (!document.getElementById(categoryName)) {
+                    const section = document.createElement("div");
+                    section.className = "section";
+                    section.id = categoryName;
+                    section.innerHTML = `
+                    <h2>${categoryName}
+                        <button onclick="deleteCategory('${categoryName}')">Delete Category</button>
+                    </h2>
+                    <button onclick="toggleEditMode(this)">Edit Links</button>
+                    <nav></nav>
+                    <div class="edit-mode">
+                        <input type="text" placeholder="Link Title" id="${categoryName}-title">
+                        <input type="url" placeholder="Link URL" id="${categoryName}-url">
+                        <button onclick="addLink('${categoryName}')">Add Link</button>
+                    </div>`;
+                    document.getElementById("container").appendChild(section);
+                }
+            });
+
+        // Load links for each category
+            document.querySelectorAll(".section").forEach(section => {
                 const sectionId = section.id;
                 const nav = section.querySelector("nav");
                 nav.innerHTML = ''; // Clear existing content
@@ -208,6 +368,82 @@
             });
         }
 
+        /* Toggle Dark/Light Mode Styling */
+        let isDarkMode = true;
+        const container = document.getElementById("container");
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.style.backgroundColor = isDarkMode ? "#333" : "#f9f9f9";
+            document.body.style.color = isDarkMode ? "#f9f9f9" : "#333";
+            
+            // Update all sections to match the mode
+            document.querySelectorAll(".section").forEach(section => {
+                section.style.backgroundColor = isDarkMode ? "#444" : "#fff";
+                section.style.color = isDarkMode ? "#f9f9f9" : "#333";
+            });
+        }
+
+
+        // Add a new category
+        function addCategory() {
+            const categoryName = prompt("Enter category name:");
+            if (categoryName && !document.getElementById(categoryName)) {
+                const section = document.createElement("div");
+                section.className = "section";
+                section.id = categoryName;
+                section.innerHTML = `
+                    <h2>${categoryName}</h2>
+                    <div class="section-buttons">
+                        <button onclick="toggleEditMode(this)">Edit Links</button>
+                        <button onclick="deleteCategory('${categoryName}')">Delete Category</button>
+                    </div>
+                    <nav></nav>
+                    <div class="edit-mode" style="display:none;">
+                        <input type="text" placeholder="Link Title" id="${categoryName}-title">
+                        <input type="url" placeholder="Link URL" id="${categoryName}-url">
+                        <button onclick="addLink('${categoryName}')">Add Link</button>
+                    </div>
+                `;
+                document.getElementById("container").appendChild(section);
+
+                // Save the new category to localStorage
+                saveCategories();
+            }
+        }
+
+        // Function to delete a category
+        function deleteCategory(categoryName) {
+            const section = document.getElementById(categoryName);
+            if (section) {
+                section.remove();
+                localStorage.removeItem(categoryName);
+                saveCategories();
+            }
+        }
+
+         /* Save All Categories to Local Storage */
+        function saveCategories() {
+            const categories = Array.from(document.getElementById("container").children).map(child => child.id);
+            localStorage.setItem("categories", JSON.stringify(categories));
+        }
+
+        // Search functionality
+        function searchLinks() {
+            const query = document.querySelector(".search-bar").value.toLowerCase();
+            const sections = container.getElementsByClassName("section");
+            Array.from(sections).forEach(section => {
+                const links = section.getElementsByTagName("a");
+                Array.from(links).forEach(link => {
+                    link.classList.remove("highlight");
+                    if (link.textContent.toLowerCase().includes(query)) {
+                        link.classList.add("highlight");
+                    }
+                });
+            });
+        }
+
+        /* Add New Link to a Category */
         function addLink(sectionId) {
             const titleInput = document.getElementById(`${sectionId}-title`);
             const urlInput = document.getElementById(`${sectionId}-url`);
@@ -227,6 +463,26 @@
             }
         }
 
+        // Drag and Drop Functions
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event, linkTitle) {
+            event.dataTransfer.setData("text", linkTitle);
+        }
+
+        function drop(event, targetSectionId) {
+            const data = event.dataTransfer.getData("text");
+            const linkElement = document.querySelector(`a[data-title="${data}"]`);
+            if (linkElement && targetSectionId !== linkElement.dataset.section) {
+                const targetNav = document.querySelector(`#${targetSectionId} nav`);
+                targetNav.appendChild(linkElement.parentNode);
+                updateLinkInStorage(targetSectionId, linkElement);
+            }
+        }
+
+         /* Utility Function to Create a Link Element */
         function createLinkElement(nav, title, url, sectionId) {
             const linkContainer = document.createElement("div");
             linkContainer.className = "link-container";
@@ -250,6 +506,12 @@
             const links = JSON.parse(localStorage.getItem(sectionId) || "[]");
             links.push({ title, url });
             localStorage.setItem(sectionId, JSON.stringify(links));
+        }
+
+        // Update saveCategories function to store category names
+        function saveCategories() {
+            const categories = Array.from(document.querySelectorAll(".section")).map(section => section.id);
+            localStorage.setItem("categories", JSON.stringify(categories));
         }
 
         function deleteLink(button, sectionId, title, url) {
