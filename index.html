@@ -5,17 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkVault</title>
     <style>
-     
-        /* Reset and Base Styling */
-        /* Apply a box model reset and remove default padding and margin */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* General Styling */
-        /* Style for the main body, including dark background and centered layout */
         body { 
             font-family: Arial, sans-serif;
             background-color: #333;
@@ -23,10 +18,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 6   0px; /* Header height offset */
+            margin-top: 60px;
         }
 
-        /* Fixed header styling with dark background, white text, and centered content */
         header { 
             position: fixed;
             top: 0;
@@ -43,8 +37,6 @@
             align-items: center;
         }
 
-        /* Category Actions */
-        /* Styling for add, delete, and toggle mode buttons */
         .category-actions {
             display: flex;
             gap: 10px;
@@ -82,8 +74,6 @@
             color: #333;
         }
 
-        /* Responsive Layout Container */
-        /* Container layout for responsive and adaptive category sections */
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -96,7 +86,6 @@
         }
 
         .section {
-            /* Styling for individual category sections */
             flex-basis: calc(33.33% - 40px);
             background-color: #444;
             border-radius: 10px;
@@ -113,7 +102,6 @@
         }
 
         .section h2 {
-             /* Styling for section titles */
             margin-top: 0;
             font-size: 20px;
             font-weight: bold;
@@ -182,10 +170,51 @@
             padding: 5px;
             border-radius: 5px;
         }
-        
 
-        /* Media Queries for Responsive Design */
-        /* Adjust layout for smaller screens */
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content button {
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #555;
+            color: #f9f9f9;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #666;
+        }
+
+        .modal-content input[type="file"] {
+            margin: 10px 0;
+        }
+
         @media screen and (max-width: 1024px) {
             .section {
                 flex-basis: calc(50% - 20px);
@@ -204,6 +233,9 @@
             .section {
                 flex-basis: calc(100% - 20px);
             }
+            .modal-content {
+                width: 80%;
+            }
         }
 
         @media screen and (max-width: 480px) {
@@ -218,7 +250,6 @@
             }
         }
     </style>    
-    </style>
 </head>
 <body>
     <header>
@@ -227,9 +258,9 @@
             <button onclick="addCategory()">Add Category</button>
             <input class="search-bar" onkeyup="searchLinks()" placeholder="Search Links">
             <button class="mode-toggle" onclick="toggleDarkMode()">Toggle Mode</button>
+            <button onclick="showFormatModal()">Format</button>
         </div>
     </header>
-    <!-- Main Container for Category Sections -->
     <div class="container" id="container">
         <div class="section" id="school">
             <h2>Education</h2>
@@ -323,20 +354,27 @@
         </div>
     </div>
 
+    <!-- Modal for Format Options -->
+    <div id="formatModal" class="modal">
+        <div class="modal-content">
+            <h3>Format Options</h3>
+            <button onclick="downloadFormat()">Download Current Format</button>
+            <br>
+            <input type="file" id="uploadFormat" accept=".json" onchange="uploadFormat(this.files)">
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
     <script>
-         /* Initialize Page with Stored Links */
         document.addEventListener("DOMContentLoaded", loadLinks);
 
-        /* Toggle Edit Mode Visibility for a Category */
         function toggleEditMode(button) {
             const editDiv = button.nextElementSibling.nextElementSibling;
             editDiv.style.display = editDiv.style.display === "none" ? "flex" : "none";
         }
 
         function loadLinks() {
-        // Load saved categories from local Storage
             const savedCategories = JSON.parse(localStorage.getItem("categories") || "[]");
-        // Create sections for each saved category
             savedCategories.forEach(categoryName => {
                 if (!document.getElementById(categoryName)) {
                     const section = document.createElement("div");
@@ -357,18 +395,16 @@
                 }
             });
 
-        // Load links for each category
             document.querySelectorAll(".section").forEach(section => {
                 const sectionId = section.id;
                 const nav = section.querySelector("nav");
-                nav.innerHTML = ''; // Clear existing content
+                nav.innerHTML = '';
 
                 const links = JSON.parse(localStorage.getItem(sectionId) || "[]");
                 links.forEach(link => createLinkElement(nav, link.title, link.url, sectionId));
             });
         }
 
-        /* Toggle Dark/Light Mode Styling */
         let isDarkMode = true;
         const container = document.getElementById("container");
 
@@ -377,15 +413,12 @@
             document.body.style.backgroundColor = isDarkMode ? "#333" : "#f9f9f9";
             document.body.style.color = isDarkMode ? "#f9f9f9" : "#333";
             
-            // Update all sections to match the mode
             document.querySelectorAll(".section").forEach(section => {
                 section.style.backgroundColor = isDarkMode ? "#444" : "#fff";
                 section.style.color = isDarkMode ? "#f9f9f9" : "#333";
             });
         }
 
-
-        // Add a new category
         function addCategory() {
             const categoryName = prompt("Enter category name:");
             if (categoryName && !document.getElementById(categoryName)) {
@@ -407,12 +440,10 @@
                 `;
                 document.getElementById("container").appendChild(section);
 
-                // Save the new category to localStorage
                 saveCategories();
             }
         }
 
-        // Function to delete a category
         function deleteCategory(categoryName) {
             const section = document.getElementById(categoryName);
             if (section) {
@@ -422,13 +453,11 @@
             }
         }
 
-         /* Save All Categories to Local Storage */
         function saveCategories() {
             const categories = Array.from(document.getElementById("container").children).map(child => child.id);
             localStorage.setItem("categories", JSON.stringify(categories));
         }
 
-        // Search functionality
         function searchLinks() {
             const query = document.querySelector(".search-bar").value.toLowerCase();
             const sections = container.getElementsByClassName("section");
@@ -443,7 +472,6 @@
             });
         }
 
-        /* Add New Link to a Category */
         function addLink(sectionId) {
             const titleInput = document.getElementById(`${sectionId}-title`);
             const urlInput = document.getElementById(`${sectionId}-url`);
@@ -463,7 +491,6 @@
             }
         }
 
-        // Drag and Drop Functions
         function allowDrop(event) {
             event.preventDefault();
         }
@@ -482,7 +509,6 @@
             }
         }
 
-         /* Utility Function to Create a Link Element */
         function createLinkElement(nav, title, url, sectionId) {
             const linkContainer = document.createElement("div");
             linkContainer.className = "link-container";
@@ -508,12 +534,6 @@
             localStorage.setItem(sectionId, JSON.stringify(links));
         }
 
-        // Update saveCategories function to store category names
-        function saveCategories() {
-            const categories = Array.from(document.querySelectorAll(".section")).map(section => section.id);
-            localStorage.setItem("categories", JSON.stringify(categories));
-        }
-
         function deleteLink(button, sectionId, title, url) {
             const linkContainer = button.parentElement;
             linkContainer.remove();
@@ -521,6 +541,71 @@
             let links = JSON.parse(localStorage.getItem(sectionId) || "[]");
             links = links.filter(link => !(link.title === title && link.url === url));
             localStorage.setItem(sectionId, JSON.stringify(links));
+        }
+
+        // Modal Functions
+        function showFormatModal() {
+            document.getElementById("formatModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("formatModal").style.display = "none";
+        }
+
+        function downloadFormat() {
+            const categories = {};
+            document.querySelectorAll(".section").forEach(section => {
+                const sectionId = section.id;
+                const links = JSON.parse(localStorage.getItem(sectionId) || "[]");
+                categories[sectionId] = links;
+            });
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(categories));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "linkvault_format.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            closeModal();
+        }
+
+        function uploadFormat(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const importedData = JSON.parse(e.target.result);
+                    for (let category in importedData) {
+                        if (importedData.hasOwnProperty(category)) {
+                            localStorage.setItem(category, JSON.stringify(importedData[category]));
+                            if (!document.getElementById(category)) {
+                                const section = document.createElement("div");
+                                section.className = "section";
+                                section.id = category;
+                                section.innerHTML = `
+                                    <h2>${category}</h2>
+                                    <button onclick="toggleEditMode(this)">Edit Links</button>
+                                    <nav></nav>
+                                    <div class="edit-mode">
+                                        <input type="text" placeholder="Link Title" id="${category}-title">
+                                        <input type="url" placeholder="Link URL" id="${category}-url">
+                                        <button onclick="addLink('${category}')">Add Link</button>
+                                    </div>`;
+                                document.getElementById("container").appendChild(section);
+                            }
+                            const nav = document.querySelector(`#${category} nav`);
+                            nav.innerHTML = '';
+                            importedData[category].forEach(link => createLinkElement(nav, link.title, link.url, category));
+                        }
+                    }
+                    saveCategories();
+                    closeModal();
+                };
+
+                reader.readAsText(file);
+            }
         }
     </script>
 </body>
