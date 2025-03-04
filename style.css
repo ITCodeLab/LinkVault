@@ -155,7 +155,7 @@ nav, .edit-mode {
 }
 
 .delete-button {
-    background-color: #b22222;
+    background-color: rgb(68, 68, 68);
     color: #f9f9f9;
     border: none;
     cursor: pointer;
