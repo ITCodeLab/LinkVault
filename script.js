@@ -30,15 +30,25 @@ function renameCategory(oldName) {
     const newName = prompt("Enter new category name:", oldName);
     if (newName && newName !== oldName && !document.getElementById(newName)) {
         const section = document.getElementById(oldName);
+
+        // Transfer links from old category to new category in localStorage
+        const oldLinks = JSON.parse(localStorage.getItem(oldName) || "[]");
+        localStorage.setItem(newName, JSON.stringify(oldLinks));
+        localStorage.removeItem(oldName); // Remove old entry
+
+        // Update UI elements
         section.id = newName;
         section.querySelector(".category-title").textContent = newName;
         section.querySelector(".rename-btn").setAttribute("onclick", `renameCategory('${newName}')`);
         section.querySelector(".delete-btn").setAttribute("onclick", `deleteCategory('${newName}')`);
-        localStorage.setItem(newName, localStorage.getItem(oldName));
-        localStorage.removeItem(oldName);
-        saveCategories();
+
+        // Update category list in localStorage
+        let categories = JSON.parse(localStorage.getItem("categories") || "[]");
+        categories = categories.map(category => (category === oldName ? newName : category));
+        localStorage.setItem("categories", JSON.stringify(categories));
     }
 }
+
 
 function deleteCategory(categoryName) {
     if (confirm(`Are you sure you want to delete "${categoryName}"?`)) {
