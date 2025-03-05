@@ -4,7 +4,11 @@ let isDarkMode = localStorage.getItem("darkMode") === "true";
 applyDarkMode();
 
 function loadLinks() {
-    const savedCategories = JSON.parse(localStorage.getItem("categories") || "[]");
+    let savedCategories = JSON.parse(localStorage.getItem("categories") || "[]");
+    
+    // Sort categories alphabetically
+    savedCategories.sort((a, b) => a.localeCompare(b));
+
     savedCategories.forEach(categoryName => {
         if (!document.getElementById(categoryName)) {
             createCategoryElement(categoryName);
