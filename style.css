@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 60px;
+    margin-top: 15px;
 }
 
 header { 
@@ -249,8 +249,8 @@ nav div {
 }
 #container {
     display: grid;
-    gap: 20px;
-    padding: 10px;
+    gap: 5px;
+    padding: 5px;
 }
 
 /* Default: Extra Large Screens (5 columns) */
