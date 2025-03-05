@@ -247,38 +247,43 @@ nav div {
     justify-content: space-between;
     gap: 10px;
 }
+#container {
+    display: grid;
+    gap: 20px;
+    padding: 10px;
+}
 
-@media screen and (max-width: 1024px) {
-    .section {
-        flex-basis: calc(50% - 20px);
+/* Default: Extra Large Screens (5 columns) */
+@media (min-width: 1400px) {
+    #container {
+        grid-template-columns: repeat(5, 1fr);
     }
 }
 
-@media screen and (max-width: 768px) {
-    header {
-        font-size: 20px;
-        padding: 10px;
-    }
-    .category-actions {
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    .section {
-        flex-basis: calc(100% - 20px);
-    }
-    .modal-content {
-        width: 80%;
+/* Large Screens (4 columns) */
+@media (max-width: 1399px) {
+    #container {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-@media screen and (max-width: 480px) {
-    .container {
-        padding: 10px;
+/* Medium Screens (3 columns) */
+@media (max-width: 1070px) {
+    #container {
+        grid-template-columns: repeat(3, 1fr);
     }
-    .section h2 {
-        font-size: 18px;
+}
+
+/* Small Screens (2 columns) */
+@media (max-width: 900px) {
+    #container {
+        grid-template-columns: repeat(2, 1fr);
     }
-    .link-container a {
-        font-size: 14px;
+}
+
+/* Mobile Phones (1 column) */
+@media (max-width: 550px) {
+    #container {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
