@@ -247,10 +247,98 @@ nav div {
     justify-content: space-between;
     gap: 10px;
 }
+
 #container {
     display: grid;
     gap: 5px;
     padding: 5px;
+}
+
+/* Updated Navbar Styles */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Make buttons in nav uniform */
+.nav-links button,
+.nav-links input {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.nav-links button:hover {
+    background-color: #666;
+}
+
+/* Hide menu button by default */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Responsive Navbar (Mobile) */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #000;
+        padding: 15px;
+        border-bottom: 2px solid #333;
+        text-align: center;
+    }
+
+    input.search-bar {
+        margin-right: 2%;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links button,
+    .nav-links input {
+        width: 80%; /* Slightly smaller width */
+        padding: 6px 8px; /* Reduce padding */
+        font-size: 12px; /* Smaller text */
+    }
+    .menu-toggle {
+        font-size: 20px; /* Slightly reduce the menu button size */
+    }
 }
 
 /* Default: Extra Large Screens (5 columns) */
