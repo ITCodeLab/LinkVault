@@ -276,4 +276,9 @@ function searchLinks() {
       title.textContent = title.textContent.toUpperCase();
     });
   }
+
+  function toggleMenu() {
+    document.querySelector(".nav-links").classList.toggle("show");
+  }
+
   
